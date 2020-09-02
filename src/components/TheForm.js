@@ -1,7 +1,6 @@
 import React from 'react'
-import { toaster } from 'evergreen-ui'
-import { Box, Button, Form, FormField, TextInput } from 'grommet';
-import InputColor from 'react-input-color';
+import { Box, Button, Form, FormField, TextInput } from 'grommet'
+import InputColor from 'react-input-color'
 import styled from 'styled-components'
 import { saveData } from '../firebase'
 
@@ -16,7 +15,8 @@ class App extends React.Component {
   state = { 
     name: '', 
     color: '#ff0000', 
-    showPicker: false
+    showPicker: false,
+    notify: false
   }
 
   onSubmit = async (e) => {
@@ -25,7 +25,8 @@ class App extends React.Component {
     const item = { name, color }
     console.log('state', item)
     await saveData(item)
-    toaster.notify('Data saved!')
+    this.setState({notify: true})
+    // toaster.notify('Data saved!')
     this.props.onItemAdded && this.props.onItemAdded(item)
   }
 
@@ -39,7 +40,7 @@ class App extends React.Component {
   }
 
   render () {
-    const { showPicker, color } = this.state
+    const { color, notify } = this.state
     // console.log('color', color, 'showPicker', showPicker)
     return (
       <Box
@@ -47,9 +48,20 @@ class App extends React.Component {
           margin: 'auto', marginTop: 100, 
           maxWidth: 500, padding: 40 
         }}>
-        <h3>This is a form</h3>
+        {/* {notify && (
+          <Box state='Sample state'>Sample message</Box>
+        )} */}
+        <h3>Tell me color</h3>
         <br/>
         <Form onSubmit={this.onSubmit} style={{ width: '100%' }}>
+          <ColorInput color={color}>
+            Pick color: &nbsp;
+            <InputColor
+              initialValue='#5e72e4'
+              onChange={this.handleColorChange}
+              placement='right'
+            />  
+          </ColorInput>
           <FormField label='Enter your text'>
             <TextInput
               required
@@ -60,15 +72,6 @@ class App extends React.Component {
               description='This is a description.'
             />
           </FormField>
-        
-          <ColorInput color={color}>
-            Pick color: &nbsp;
-            <InputColor
-              initialValue='#5e72e4'
-              onChange={this.handleColorChange}
-              placement='right'
-            />  
-          </ColorInput>
           <br />
           <Button primary type='submit' size='medium' label='Sup 😎' />
         </Form>

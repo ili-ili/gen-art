@@ -8,6 +8,9 @@ import { loadData } from './firebase'
 
 const theme = {
   global: {
+    colors: {
+      brand: 'black',
+    },
     font: {
       family: 'Roboto',
       size: '18px',
@@ -15,7 +18,6 @@ const theme = {
     },
   },
 };
-
 class App extends React.Component {
   state = { items: [] }
 
